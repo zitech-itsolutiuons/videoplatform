@@ -1,3 +1,7 @@
+import { NextResponse } from 'next/server';
+import { dbConnect } from '../../../../../lib/db';
+import Video from '../../../../../models/Video';
+import { getAuthUser, issueStreamToken } from '../../../../../lib/auth';
 // app/api/auth/stream-token/[videoId]/route.js
 // -----------------------------------------------------------------------------
 // Called by the player right before (and periodically during) playback. Does
@@ -5,10 +9,9 @@
 // route re-checks the cheap fields again on every chunk so a mid-playback
 // revocation still bites immediately.
 // -----------------------------------------------------------------------------
-import { NextResponse } from 'next/server';
-import { dbConnect } from '../../../../../lib/db';
-import Video from '../../../../../models/Video';
-import { getAuthUser, issueStreamToken } from '../../../../../lib/auth';
+
+// Never statically prerendered — this route depends on live auth/DB state.
+export const dynamic = "force-dynamic";
 
 export async function POST(req, { params }) {
   await dbConnect();

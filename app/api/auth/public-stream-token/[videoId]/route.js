@@ -1,3 +1,7 @@
+import { NextResponse } from 'next/server';
+import { dbConnect } from '../../../../../lib/db';
+import Video from '../../../../../models/Video';
+import { issuePublicStreamToken } from '../../../../../lib/auth';
 // app/api/auth/public-stream-token/[videoId]/route.js
 // -----------------------------------------------------------------------------
 // Deliberately does NOT call getAuthUser — this is the no-login entry point.
@@ -5,10 +9,9 @@
 // Regenerating/clearing the secret, or flipping is_public off, immediately
 // kills every link that was ever shared using the old secret.
 // -----------------------------------------------------------------------------
-import { NextResponse } from 'next/server';
-import { dbConnect } from '../../../../../lib/db';
-import Video from '../../../../../models/Video';
-import { issuePublicStreamToken } from '../../../../../lib/auth';
+
+// Never statically prerendered — this route depends on live auth/DB state.
+export const dynamic = "force-dynamic";
 
 export async function POST(req, { params }) {
   await dbConnect();

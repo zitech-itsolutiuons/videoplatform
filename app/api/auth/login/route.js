@@ -1,8 +1,11 @@
-// app/api/auth/login/route.js
 import { NextResponse } from 'next/server';
 import { dbConnect } from '../../../../lib/db';
 import User from '../../../../models/User';
 import { issueSessionToken } from '../../../../lib/auth';
+// app/api/auth/login/route.js
+
+// Never statically prerendered — this route depends on live auth/DB state.
+export const dynamic = "force-dynamic";
 
 export async function POST(req) {
   await dbConnect();

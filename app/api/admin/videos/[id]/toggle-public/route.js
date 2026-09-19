@@ -1,10 +1,13 @@
-// app/api/admin/videos/[id]/toggle-public/route.js
-// Turning this ON auto-generates a share secret if one doesn't exist yet.
-// Turning it OFF instantly kills the public link (checked live in stream route).
 import { NextResponse } from 'next/server';
 import { dbConnect } from '../../../../../../lib/db';
 import Video from '../../../../../../models/Video';
 import { requireAdminUser } from '../../../../../../lib/requireAdmin';
+// app/api/admin/videos/[id]/toggle-public/route.js
+// Turning this ON auto-generates a share secret if one doesn't exist yet.
+// Turning it OFF instantly kills the public link (checked live in stream route).
+
+// Never statically prerendered — this route depends on live auth/DB state.
+export const dynamic = "force-dynamic";
 
 export async function PATCH(req, { params }) {
   await dbConnect();

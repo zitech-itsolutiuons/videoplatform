@@ -1,11 +1,14 @@
-// app/api/admin/videos/[id]/revoke-user/route.js
-// Because the stream route re-checks allowed_users live on every segment
-// request, this takes effect within one request round-trip — no waiting for
-// the viewer's 5-min stream token to expire.
 import { NextResponse } from 'next/server';
 import { dbConnect } from '../../../../../../lib/db';
 import Video from '../../../../../../models/Video';
 import { requireAdminUser } from '../../../../../../lib/requireAdmin';
+// app/api/admin/videos/[id]/revoke-user/route.js
+// Because the stream route re-checks allowed_users live on every segment
+// request, this takes effect within one request round-trip — no waiting for
+// the viewer's 5-min stream token to expire.
+
+// Never statically prerendered — this route depends on live auth/DB state.
+export const dynamic = "force-dynamic";
 
 export async function PATCH(req, { params }) {
   await dbConnect();
